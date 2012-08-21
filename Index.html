@@ -1,0 +1,122 @@
+﻿<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>GAP Check In</title>
+	<style type="text/css">
+		body
+		{
+			background-color: #054F87;
+			color: white;
+			font-family: "Trebuchet MS" , Verdana, Helvetica, "Sans-Serif";
+		}
+		
+		.checkinButton
+		{
+			height: 50px;
+			font-weight: bold;
+		}
+	</style>
+	<script type="text/javascript" src="assets/js/jquery-1.8.0.min.js"></script>
+	<script language="javascript">
+
+		function checkin() {
+			$("#status").html("");
+			writeStatus("Checking in at " + new Date());
+			//writeStatus("Getting location");
+			getlocation(reportPosition);
+		}
+
+		function getlocation(callback) {
+			navigator.geolocation.getCurrentPosition(
+				function (position) {
+					writeStatus("Latitude:" + position.coords.latitude + " Longitude:" + position.coords.longitude);
+					//console.log(position);
+					callback(position);
+				},
+				// next function is the error callback
+				function (error) {
+					switch (error.code) {
+						case error.TIMEOUT:
+							writeStatus('GPS Timeout');
+							break;
+						case error.POSITION_UNAVAILABLE:
+							writeStatus('GPS Position unavailable');
+							break;
+						case error.PERMISSION_DENIED:
+							writeStatus('GPS Permission denied');
+							break;
+						case error.UNKNOWN_ERROR:
+							writeStatus('GPS Unknown error');
+							break;
+					}
+				});
+		}
+
+		function reportPosition(position) {
+			var tenant = "1234";
+			var device = "123456789012346";
+
+			var speed = position.coords.speed ? position.coords.speed : 0;
+			var heading = position.coords.heading ? position.coords.heading : 0;
+			var altitude = position.coords.altitude ? position.coords.altitude : 0;
+
+			var message = {
+				"MessageType": "CheckIn",
+				"Message": "Checked in",
+				"Position":
+			    {
+				    "Latitude": position.coords.latitude,
+				    "Longitude": position.coords.longitude,
+				    "Speed": speed,
+				    "Heading": heading,
+				    "Altitude": altitude,
+				    "Accuracy": position.coords.accuracy,
+				    "LocationSource": "Gps",
+                    "GpsTimestamp" : ISODateString(new Date(position.timestamp))
+			    },
+				"SentFromDevice": ISODateString(new Date()),
+				"EmergencyState": "None"
+			}
+
+			writeStatus("Checking in...");
+
+			//jQuery.ajax("http://api.globalalerting.com/" + tenant + "/devices/" + device + "/momessages", {
+			//	cache: false,
+			//	type: "POST",
+			//	headers: {},
+			//	data: message,
+			//	dataType: "json",
+			//	complete: function (jqXHR, textStatus) { 
+            //        if (textStatus == "success")
+            //            writeStatus("Check-in successful");
+            //        else 
+            //            writeStatus("An error occured, Please try again");
+            //            }
+		    //});
+
+			writeStatus(JSON.stringify(message));
+		}
+
+		function ISODateString(d) {
+			function pad(n) { return n < 10 ? '0' + n : n }
+			return d.getUTCFullYear() + '-' + pad(d.getUTCMonth() + 1) + '-' + pad(d.getUTCDate()) + 'T' + pad(d.getUTCHours()) + ':' + pad(d.getUTCMinutes()) + ':' + pad(d.getUTCSeconds()) + 'Z'
+        }
+
+		function writeStatus(message) {
+			$("#status").html(message + "<br/>")
+		}
+
+		if (!navigator.geolocation) {
+			alert('GPS API not supported on this device');
+		}
+	</script>
+</head>
+<body>
+	<center>
+			<h1>GAP Check-In</h1>
+			<button onclick="checkin();" class="checkinButton">Check In</button><br/><br/>
+           
+			<div id="status"></div> <img src="http://api2.globalalerting.com/Content/powered-by-gap.png" />
+		</center>
+</body>
+</html>
