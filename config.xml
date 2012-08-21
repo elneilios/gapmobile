@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <widget xmlns		= "http://www.w3.org/ns/widgets"
 	xmlns:gap	= "http://phonegap.com/ns/1.0"
-	id		= "com.phonegap.getting.started"
+	id		= "com.gap.mobile"
 	version 	= "1.0.0">
 
-	<name>PhoneGap: Getting Started</name>
+	<name>Global Alerting Platform: Mobile</name>
 
 	<description>
-		A template for getting started with PhoneGap development and build.phonegap.com
+		A client app for Global Alerting Platform
 	</description>
 
-	<author href="http://alunny.github.com"
-		email="andrew.lunny@nitobi.com">
-		Andrew Lunny
+	<author href="http://elneilios.github.com"
+		email="neil.alderson@aws.net">
+		Neil Alderson
 	</author>
 
 	<icon src="icon.png" gap:role="default" />
