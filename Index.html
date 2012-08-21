@@ -80,21 +80,21 @@
 
 			writeStatus("Checking in...");
 
-			//jQuery.ajax("http://api.globalalerting.com/" + tenant + "/devices/" + device + "/momessages", {
-			//	cache: false,
-			//	type: "POST",
-			//	headers: {},
-			//	data: message,
-			//	dataType: "json",
-			//	complete: function (jqXHR, textStatus) { 
-            //        if (textStatus == "success")
-            //            writeStatus("Check-in successful");
-            //        else 
-            //            writeStatus("An error occured, Please try again");
-            //            }
-		    //});
+			jQuery.ajax("http://api.globalalerting.com/" + tenant + "/devices/" + device + "/momessages", {
+				cache: false,
+				type: "POST",
+				headers: {},
+				data: message,
+				dataType: "json",
+				complete: function (jqXHR, textStatus) { 
+                    if (textStatus == "success")
+                        writeStatus("Check-in successful");
+                    else 
+                        writeStatus("An error occured, Please try again");
+                        }
+		    });
 
-			writeStatus(JSON.stringify(message));
+			//writeStatus(JSON.stringify(message));
 		}
 
 		function ISODateString(d) {
